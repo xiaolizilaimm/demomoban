@@ -1,13 +1,9 @@
 <template>
-  <div></div>
+  <div class="dashboard">首页</div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {}
-  }
-}
+export default {}
 </script>
 
 <style lang="scss" scoped></style>

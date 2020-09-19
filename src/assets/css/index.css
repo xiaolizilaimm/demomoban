@@ -1,0 +1,8 @@
+/* 覆盖原有的样式 */
+.login_box .el-form-item__label {
+  color: #fff;
+}
+
+.el-menu .is-active i {
+  color: #409EFF !important;
+}
