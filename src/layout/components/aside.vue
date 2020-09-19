@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    :default-active="$router.path"
+    :default-active="$route.path"
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
@@ -61,6 +61,9 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath)
     }
+  },
+  created() {
+    console.log(this.$router)
   },
   props: {
     bool: {

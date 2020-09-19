@@ -10,7 +10,9 @@
       <Aside :bool="isCollapse" />
     </el-aside>
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>
+        <Header />
+      </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -20,9 +22,12 @@
 
 <script>
 import Aside from './components/aside'
+import Header from './components/header'
+
 export default {
   components: {
-    Aside
+    Aside,
+    Header
   },
   data() {
     return {
