@@ -41,13 +41,16 @@ export default {
 .el-container {
   width: 100%;
   height: 100%;
+  min-width: 1050px;
+
+  .el-aside {
+    background: #2b3c4d;
+  }
+  .el-main {
+    background-color: #e4e4e4;
+  }
 }
-.el-aside {
-  background: #2b3c4d;
-}
-.el-header {
-  background: pink;
-}
+
 .head_title {
   display: flex;
   justify-content: center;

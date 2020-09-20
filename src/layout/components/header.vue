@@ -1,40 +1,76 @@
 <template>
   <div class="header">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        <a href="/">活动管理</a>
-      </el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      <el-breadcrumb-item
+        v-for="item in breadcrumbArr"
+        :key="item.title"
+        :to="{ path: item.path }"
+        >{{ item.title }}</el-breadcrumb-item
+      >
     </el-breadcrumb>
     <div class="users">
-      <div>欢迎你,小貂蝉</div>
-      <div>
-        <img src="@/assets/images/timg.jpg" alt />
-      </div>
+      <!-- 下拉框 -->
+      <el-dropdown trigger="click">
+        <span class="el-dropdown-link">
+          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>黄金糕</el-dropdown-item>
+          <el-dropdown-item>狮子头</el-dropdown-item>
+          <el-dropdown-item>螺蛳粉</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <!-- 头像 -->
+      <el-avatar :size="30" :src="circleUrl"></el-avatar>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      circleUrl:
+        'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      breadcrumbArr: []
+    }
+  },
+  created() {
+    this.pathChange()
+  },
+  methods: {
+    pathChange() {
+      // console.log(this.$route)
+      const arr = [{ title: '首页', path: '/dashboard' }]
+      this.$route.matched.forEach(item => {
+        if (item.path && item.meta.title) {
+          arr.push({
+            title: item.meta.title,
+            path: item.path
+          })
+        }
+      })
+      // console.log(arr)
+      this.breadcrumbArr = arr
+    }
+  },
+  watch: {
+    '$route.path'() {
+      this.pathChange()
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .header {
-  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .users {
-    display: flex;
-    align-items: center;
-    img {
-      width: 50px;
-      margin-left: 8px;
-      border-radius: 50%;
-    }
-  }
+  height: 100%;
+}
+.el-avatar {
+  vertical-align: middle;
+  margin-left: 20px;
 }
 </style>

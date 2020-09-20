@@ -37,7 +37,7 @@
         <i class="iconfont icon-zhanghao"></i>
         <span>账号管理</span>
       </template>
-      <el-menu-item index="/acount/index">站好列表</el-menu-item>
+      <el-menu-item index="/acount/index">账号列表</el-menu-item>
       <el-menu-item index="/acount/acountAdd">添加账号</el-menu-item>
       <el-menu-item index="/acount/resetPwd">修改密码</el-menu-item>
     </el-submenu>
@@ -61,9 +61,6 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath)
     }
-  },
-  created() {
-    console.log(this.$router)
   },
   props: {
     bool: {
