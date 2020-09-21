@@ -11,7 +11,11 @@
         class="demo-ruleForm"
       >
         <el-form-item prop="uname" label="用戶名:">
-          <el-input type="text" v-model.number="loginForm.uname" prefix-icon="iconfont icon-yonghu"></el-input>
+          <el-input
+            type="text"
+            v-model.number="loginForm.uname"
+            prefix-icon="iconfont icon-yonghu"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="pass" label="密码:">
           <el-input
@@ -30,7 +34,9 @@
         </el-form-item>
         <el-form-item>
           <div class="btn">
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')"
+              >提交</el-button
+            >
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </div>
         </el-form-item>
@@ -40,6 +46,16 @@
 </template>
 
 <script>
+import { login } from '@/api/acount'
+// getdata()
+// async function getdata() {
+//   const data = await login({
+//     account: 'admin',
+//     password: 666
+//   })
+//   console.log(data)
+// }
+
 export default {
   data() {
     return {
@@ -62,21 +78,31 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          this.$message({
-            message: '恭喜你，登录成功',
-            type: 'success',
-            duration: 2000
+          const data = await login({
+            account: this.loginForm.uname,
+            password: this.loginForm.pass
           })
-          this.$router.push('/')
+          console.log(data)
+          if (data.code === 0) {
+            this.$message({
+              message: data.msg,
+              type: 'success',
+              duration: 2000
+            })
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 1000)
+          } else if (data.code === 1) {
+            this.$message({
+              message: data.msg,
+              type: 'error',
+              duration: 2000
+            })
+            return false
+          }
         } else {
-          this.$message({
-            message: '验证失败',
-            type: 'error',
-            duration: 2000
-          })
-          return false
         }
       })
     },
