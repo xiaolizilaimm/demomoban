@@ -22,8 +22,8 @@
             </el-form-item>
             <el-form-item label="用户组">
               <el-select v-model="acountAdd.group" placeholder="请选择用户组">
-                <el-option label="普通管理员" value="nrmal"></el-option>
-                <el-option label="超级管理员" value="super"></el-option>
+                <el-option label="普通管理员" value="普通管理员"></el-option>
+                <el-option label="超级管理员" value="超级管理员"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -41,6 +41,7 @@
 
 <script>
 import Panel from '../../components/panel/index'
+import { acountAdd } from '@/api/acount.js'
 export default {
   components: {
     Panel
@@ -66,8 +67,14 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
+          const data = await acountAdd({
+            account: this.acountAdd.uname,
+            password: this.acountAdd.pwd,
+            userGroup: this.acountAdd.group
+          })
+          console.log(data)
           alert('submit!')
         } else {
           console.log('error submit!!')

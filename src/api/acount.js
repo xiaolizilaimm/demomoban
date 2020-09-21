@@ -4,5 +4,9 @@
 import req from '@/utils/request'
 
 export function login(parameter) {
-  return req.post('http://127.0.0.1:5000/users/checkLogin', parameter)
+  return req.post('/users/checkLogin', parameter)
+}
+
+export function acountAdd(parameter) {
+  return req.post('/users/add', parameter)
 }
