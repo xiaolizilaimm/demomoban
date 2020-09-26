@@ -4,9 +4,38 @@
 
 import axios from 'axios'
 import qs from 'qs'
+import local from '@/utils/local'
+import { Message } from 'element-ui'
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000'
 axios.defaults.timeout = 5000
+
+// axios请求拦截器
+axios.interceptors.request.use(config => {
+  const token = local.get('k_v')
+  if (token) {
+    config.headers.Authorization = token
+  }
+  return config
+})
+
+// axios响应拦截
+axios.interceptors.response.use(res => {
+  // console.log(res.data)
+  const { code, msg } = res.data
+  if (code === 0) {
+    Message({
+      type: 'success',
+      message: msg
+    })
+  } else if (code === 1) {
+    Message({
+      type: 'error',
+      message: msg
+    })
+  }
+  return res
+})
 
 export default {
   get(url, params = {}) {

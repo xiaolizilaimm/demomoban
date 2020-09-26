@@ -1,5 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import local from '@/utils/local'
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.use(VueRouter)
 
@@ -119,6 +125,12 @@ const routes = [
             component: () => import('../views/saleCount/orderCount.vue')
           }
         ]
+      },
+      {
+        path: '/myCenter',
+        name: 'myCenter',
+        meta: { title: '个人中心' },
+        component: () => import('../views/myCenter')
       }
     ]
   },
@@ -133,4 +145,17 @@ const router = new VueRouter({
   routes
 })
 
+// 路由的请求拦截
+router.beforeEach((to, from, next) => {
+  const token = local.get('k_v')
+  if (token) {
+    next()
+  } else {
+    if (to.path === '/login') {
+      next()
+    } else {
+      next('/login')
+    }
+  }
+})
 export default router

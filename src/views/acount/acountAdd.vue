@@ -69,13 +69,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const data = await acountAdd({
+          await acountAdd({
             account: this.acountAdd.uname,
             password: this.acountAdd.pwd,
             userGroup: this.acountAdd.group
           })
-          console.log(data)
-          alert('submit!')
+          this.$router.push('/acount/index')
         } else {
           console.log('error submit!!')
           return false

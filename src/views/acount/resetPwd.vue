@@ -24,9 +24,7 @@
               <el-input type="password" v-model="resetPwd.newPwd2"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')"
-                >立即创建</el-button
-              >
+              <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
               <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -37,23 +35,35 @@
 </template>
 
 <script>
-import Panel from '../../components/panel/index'
-import { pwdReg } from '../../utils/validate.js'
+import Panel from '@/components/panel/index'
+import local from '@/utils/local'
+import { pwdReg } from '@/utils/validate.js'
+import { checkoldpwd, editpwd } from '@/api/acount'
 
 export default {
   components: {
     Panel
   },
   data() {
+    var originalPwd = async (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('密码不能为空'))
+      } else {
+        const data = await checkoldpwd({
+          oldPwd: this.resetPwd.pwd
+        })
+        if (data.code === '11') {
+          callback(new Error('再好好想想原密码吧!'))
+        } else {
+          callback()
+        }
+      }
+    }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('密码不能为空'))
       } else if (!pwdReg.test(value)) {
-        callback(
-          new Error(
-            '至少8-16个字符，至少1个大写字母，1个小写字母和1个数字，其他可以是任意字符'
-          )
-        )
+        callback(new Error('至少5-16个字符'))
       } else {
         if (this.resetPwd.newPwd2 !== '') {
           this.$refs.ruleForm.validateField('newPwd2')
@@ -77,7 +87,7 @@ export default {
         newPwd2: ''
       },
       rules: {
-        pwd: [{ validator: validatePass, trigger: 'blur' }],
+        pwd: [{ validator: originalPwd, trigger: 'blur' }],
         newPwd: [{ validator: validatePass, trigger: 'blur' }],
         newPwd2: [{ validator: validatePass2, trigger: 'blur' }]
       }
@@ -85,11 +95,21 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          alert('submit!')
+          const { code } = await editpwd({
+            newPwd: this.resetPwd.newPwd
+          })
+          if (code === 0) {
+            local.rem('k_v')
+            this.$router.push('/login')
+          }
         } else {
-          console.log('error submit!!')
+          this.$message({
+            message: '验证不通过',
+            type: 'error',
+            duration: 2000
+          })
           return false
         }
       })

@@ -6,3 +6,7 @@
 .el-menu .is-active i {
   color: #409EFF !important;
 }
+
+.el-pagination {
+  margin: 20px 0 10px;
+}
