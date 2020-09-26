@@ -37,6 +37,9 @@
           >
             <i class="el-icon-plus"></i>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="storeForm.pics" alt />
+          </el-dialog>
         </el-form-item>
         <el-form-item label="配送费" prop="deliveryPrice">
           <el-input v-model="storeForm.deliveryPrice"></el-input>
@@ -69,13 +72,10 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-          >
-          </el-date-picker>
+          ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >修改</el-button
-          >
+          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -145,7 +145,7 @@ export default {
       const { data } = await getShopInfo()
       this.storeForm = data
       const arr = []
-      data.pics.forEach(item => {
+      data.pics.forEach((item) => {
         arr.push({
           name: item,
           url: JSON.parse(this.imgUrl + item)
@@ -154,7 +154,7 @@ export default {
       this.storeForm.pics = arr
     },
     submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           const obj = _.cloneDeep(this.storeForm)
           obj.pics = JSON.stringify(obj.pics)
@@ -179,6 +179,7 @@ export default {
     handlePictureCardPreview(file) {
       this.storeForm.pics = file.url
       this.dialogVisible = true
+      console.log(file.url)
     }
   }
 }
