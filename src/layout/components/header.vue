@@ -5,13 +5,14 @@
         v-for="item in breadcrumbArr"
         :key="item.title"
         :to="{ path: item.path }"
-      >{{ item.title }}</el-breadcrumb-item>
+        >{{ item.title }}</el-breadcrumb-item
+      >
     </el-breadcrumb>
     <div class="users">
       <!-- 下拉框 -->
       <el-dropdown trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">
-          欢迎你,{{userList.account}}
+          欢迎你,{{ userList.account }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -63,7 +64,11 @@ export default {
           break
         case 'out':
           local.rem('k_v')
-          this.$router.push('/login')
+          local.rem('role')
+          local.rem('menu')
+          // 需要刷新来重新计算权限
+          location.reload()
+          // this.$router.push('/login')
           break
         default:
           break

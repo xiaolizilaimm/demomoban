@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="6" v-for="(item,i) in dataList" :key="item.id">
+    <el-col :span="6" v-for="(item,i) in cardList" :key="item.id">
       <div>
         <i :class="'iconfont ' + item.icon" :style="{ color:colorArr[i] }"></i>
       </div>
       <div>
         <span>{{ item.title }}</span>
-        <p>{{ item.num }}</p>
+        <p>{{ dataList[item.name] }}</p>
       </div>
     </el-col>
   </el-row>
@@ -16,13 +16,39 @@
 export default {
   props: {
     dataList: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      colorArr: ['#1296db', '#d4237a', '#1296db', '#1afa29']
+      colorArr: ['#1296db', '#d4237a', '#1296db', '#1afa29'],
+      cardList: [
+        {
+          id: 1,
+          icon: 'icon-wenjian',
+          title: '总订单',
+          name: 'totalOrder'
+        },
+        {
+          id: 2,
+          icon: 'icon-Dollar',
+          title: '总销售额',
+          name: 'totalAmount'
+        },
+        {
+          id: 3,
+          icon: 'icon-renwu',
+          title: '今日订单数',
+          name: 'todayOrder'
+        },
+        {
+          id: 4,
+          icon: 'icon-renminbi',
+          title: '今日销售额',
+          name: 'totayAmount'
+        }
+      ]
     }
   }
 }

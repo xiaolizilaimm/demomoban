@@ -11,49 +11,40 @@
     :collapse-transition="false"
     router
   >
-    <el-menu-item index="/dashboard">
-      <i class="iconfont icon-shouye"></i>
-      <span slot="title">后台首页</span>
-    </el-menu-item>
-    <el-menu-item index="/order/index">
-      <i class="iconfont icon-icon-"></i>
-      <span slot="title">订单管理</span>
-    </el-menu-item>
-    <el-submenu index="/product/index">
-      <template slot="title">
-        <i class="iconfont icon-shangpin"></i>
-        <span>商品管理</span>
-      </template>
-      <el-menu-item index="/product/index">商品列表</el-menu-item>
-      <el-menu-item index="/product/productadd">商品添加</el-menu-item>
-      <el-menu-item index="/product/productcate">商品分类</el-menu-item>
-    </el-submenu>
-    <el-menu-item index="/store/index">
-      <i class="iconfont icon-dianpu"></i>
-      <span slot="title">店铺管理</span>
-    </el-menu-item>
-    <el-submenu index="/acount/index">
-      <template slot="title">
-        <i class="iconfont icon-zhanghao"></i>
-        <span>账号管理</span>
-      </template>
-      <el-menu-item index="/acount/index">账号列表</el-menu-item>
-      <el-menu-item index="/acount/acountAdd">添加账号</el-menu-item>
-      <el-menu-item index="/acount/resetPwd">修改密码</el-menu-item>
-    </el-submenu>
-    <el-submenu index="/saleCount/goodsCount">
-      <template slot="title">
-        <i class="iconfont icon-tongji"></i>
-        <span>销售统计</span>
-      </template>
-      <el-menu-item index="/saleCount/goodsCount">商品统计</el-menu-item>
-      <el-menu-item index="/saleCount/orderCount">订单统计</el-menu-item>
-    </el-submenu>
+    <template v-for="item in menu">
+      <el-menu-item
+        v-if="
+          (item.children && item.children === 1) || item.path === '/dashboard'
+        "
+        :index="item.path"
+        :key="item.path"
+      >
+        <i class="iconfont" :class="item.meta.icon"></i>
+        <span slot="title">{{ item.meta.title }}</span>
+      </el-menu-item>
+      <el-submenu v-else :index="item.path" :key="item.path">
+        <template slot="title">
+          <i class="iconfont" :class="item.meta.icon"></i>
+          <span>{{ item.meta.title }}</span>
+        </template>
+        <el-menu-item
+          v-for="item2 in item.children"
+          :key="item2.path"
+          :index="item2.path"
+          >{{ item2.meta.title }}</el-menu-item
+        >
+      </el-submenu>
+    </template>
   </el-menu>
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
+  created() {
+    this.menu = JSON.parse(local.get('menu'))
+    console.log(this.menu)
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath)

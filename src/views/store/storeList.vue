@@ -27,13 +27,14 @@
             :src="imgUrl + storeForm.avatar"
           ></el-avatar>
         </el-form-item>
-        <el-form-item label="店铺图片" prop="delivery">
+        <el-form-item label="店铺图片">
           <el-upload
             action="http://127.0.0.1:5000/shop/upload"
             list-type="picture-card"
             :file-list="storeForm.pics"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :on-success="handleSuccess"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -143,26 +144,34 @@ export default {
   methods: {
     async getData() {
       const { data } = await getShopInfo()
+
+      if (!Array.isArray(data.pics)) {
+        data.pics = [data.pics]
+      }
       this.storeForm = data
-      const arr = []
-      data.pics.forEach((item) => {
-        arr.push({
-          name: item,
-          url: JSON.parse(this.imgUrl + item)
-        })
-      })
-      this.storeForm.pics = arr
+      // const arr = []
+      // data.pics.forEach((item) => {
+      //   arr.push({
+      //     name: item,
+      //     url: this.imgUrl + item
+      //   })
+      // })
+      // console.log(arr)
+      // this.storeForm.pics = arr
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          console.log(this.storeForm)
           const obj = _.cloneDeep(this.storeForm)
           obj.pics = JSON.stringify(obj.pics)
           obj.supports = JSON.stringify(obj.supports)
           obj.date = JSON.stringify(obj.date)
+
           const data = await shopEdit(obj)
           // console.log(data)
           if (data.code === 0) {
+            // this.getData()
           }
         } else {
           this.$message.error('验证失败')
@@ -173,13 +182,20 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
+    handleRemove(file) {
+      console.log(file)
     },
     handlePictureCardPreview(file) {
       this.storeForm.pics = file.url
       this.dialogVisible = true
       console.log(file.url)
+    },
+    handleSuccess(res, file) {
+      console.log(res)
+      this.storeForm.pics.push({
+        name: res.imgUrl,
+        url: this.imgUrl + res.imgUrl
+      })
     }
   }
 }

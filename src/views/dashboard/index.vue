@@ -1,46 +1,54 @@
 <template>
   <div class="dashboard">
-    <Card :dataList="cardList" />
-    <Echarts />
+    <Card :dataList="sonData" />
+    <Ech :optData="echData"></Ech>
   </div>
 </template>
 
 <script>
 import Card from './components/card'
-import Echarts from './components/Echarts'
+import Ech from './components/Echarts'
+import { totaldata } from '@/api/dashboard'
 export default {
   components: {
     Card,
-    Echarts
+    Ech
   },
   data() {
     return {
-      cardList: [
-        {
-          id: 1,
-          icon: 'icon-wenjian',
-          title: '总订单',
-          num: '102,400'
-        },
-        {
-          id: 2,
-          icon: 'icon-Dollar',
-          title: '总销售额',
-          num: '102,400'
-        },
-        {
-          id: 3,
-          icon: 'icon-renwu',
-          title: '今日订单数',
-          num: '102,400'
-        },
-        {
-          id: 4,
-          icon: 'icon-renminbi',
-          title: '今日销售额',
-          num: '102,400'
-        }
-      ]
+      sonData: {},
+      echData: {}
+    }
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    async getData() {
+      const {
+        todayOrder,
+        totalAmount,
+        totalOrder,
+        totayAmount,
+        amountData,
+        orderData,
+        xData
+      } = await totaldata()
+      this.sonData = {
+        todayOrder,
+        totalAmount,
+        totalOrder,
+        totayAmount
+      }
+      this.echData = {
+        amountData,
+        orderData,
+        xData
+      }
+      // console.log(data)
+    },
+    opt(o) {
+      this.optData = o
     }
   }
 }

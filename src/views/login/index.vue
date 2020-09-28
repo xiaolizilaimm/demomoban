@@ -11,7 +11,11 @@
         class="demo-ruleForm"
       >
         <el-form-item prop="uname" label="用戶名:">
-          <el-input type="text" v-model.number="loginForm.uname" prefix-icon="iconfont icon-yonghu"></el-input>
+          <el-input
+            type="text"
+            v-model.number="loginForm.uname"
+            prefix-icon="iconfont icon-yonghu"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="pass" label="密码:">
           <el-input
@@ -30,7 +34,9 @@
         </el-form-item>
         <el-form-item>
           <div class="btn">
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')"
+              >提交</el-button
+            >
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </div>
         </el-form-item>
@@ -42,6 +48,7 @@
 <script>
 import { login } from '@/api/acount'
 import local from '@/utils/local'
+import { creatRouter } from '@/router'
 export default {
   data() {
     return {
@@ -70,8 +77,11 @@ export default {
             account: this.loginForm.uname,
             password: this.loginForm.pass
           })
+          console.log(data)
           if (data.code === 0) {
             local.set('k_v', data.token)
+            local.set('role', data.role)
+            creatRouter()
             setTimeout(() => {
               this.$router.push('/')
             }, 1000)
